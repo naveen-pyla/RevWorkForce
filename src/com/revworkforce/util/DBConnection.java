@@ -8,7 +8,7 @@ public class DBConnection {
 
     // 1. Database configuration
     private static final String URL =
-            "jdbc:oracle:thin:@//localhost:1521/FREEPDB1";
+            "jdbc:oracle:thin:@//localhost:1522/XEPDB1";
 
     private static final String USERNAME = "rev_workforce";
     private static final String PASSWORD = "rev_workforce123";
