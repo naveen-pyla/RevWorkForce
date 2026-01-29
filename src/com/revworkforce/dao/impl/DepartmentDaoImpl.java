@@ -10,100 +10,144 @@ import java.util.List;
 
 public class DepartmentDaoImpl implements IDepartmentDao {
 
+    // ================= SQL QUERIES =================
+
+    private static final String INSERT =
+            "INSERT INTO department (department_name) VALUES (?)";
+
+    private static final String UPDATE =
+            "UPDATE department SET department_name = ? WHERE department_id = ?";
+
+    private static final String SELECT_BY_ID =
+            "SELECT department_id, department_name FROM department WHERE department_id = ?";
+
+    private static final String SELECT_ALL =
+            "SELECT department_id, department_name FROM department";
+
+    private static final String DELETE =
+            "DELETE FROM department WHERE department_id = ?";
+
+    private static final String EXISTS_BY_NAME =
+            "SELECT 1 FROM department WHERE LOWER(department_name) = LOWER(?)";
+
+    // ================= CRUD METHODS =================
+
     @Override
     public boolean addDepartment(Department department) {
-        String sql = "INSERT INTO department (department_name) VALUES (?)";
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(INSERT)) {
 
             ps.setString(1, department.getDepartmentName());
-            return ps.executeUpdate() > 0;
+            return ps.executeUpdate() == 1;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logError("addDepartment", e);
+            return false;
         }
-        return false;
     }
 
     @Override
     public boolean updateDepartment(Department department) {
-        String sql = "UPDATE department SET department_name = ? WHERE department_id = ?";
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(UPDATE)) {
 
             ps.setString(1, department.getDepartmentName());
             ps.setInt(2, department.getDepartmentId());
 
-            return ps.executeUpdate() > 0;
+            return ps.executeUpdate() == 1;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logError("updateDepartment", e);
+            return false;
         }
-        return false;
     }
 
     @Override
     public Department getDepartmentById(int departmentId) {
-        String sql = "SELECT department_id, department_name FROM department WHERE department_id = ?";
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(SELECT_BY_ID)) {
 
             ps.setInt(1, departmentId);
-            ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                return new Department(
-                        rs.getInt("department_id"),
-                        rs.getString("department_name")
-                );
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? mapRow(rs) : null;
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logError("getDepartmentById", e);
+            return null;
         }
-        return null;
     }
 
     @Override
     public List<Department> getAllDepartments() {
+
         List<Department> departments = new ArrayList<>();
-        String sql = "SELECT department_id, department_name FROM department";
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
+             PreparedStatement ps = con.prepareStatement(SELECT_ALL);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                departments.add(
-                        new Department(
-                                rs.getInt("department_id"),
-                                rs.getString("department_name")
-                        )
-                );
+                departments.add(mapRow(rs));
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logError("getAllDepartments", e);
         }
+
         return departments;
     }
 
     @Override
     public boolean deleteDepartment(int departmentId) {
-        String sql = "DELETE FROM department WHERE department_id = ?";
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(DELETE)) {
 
             ps.setInt(1, departmentId);
-            return ps.executeUpdate() > 0;
+            return ps.executeUpdate() == 1;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logError("deleteDepartment", e);
+            return false;
         }
-        return false;
+    }
+
+    @Override
+    public boolean existsByName(String departmentName) {
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(EXISTS_BY_NAME)) {
+
+            ps.setString(1, departmentName);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // existence check
+            }
+
+        } catch (SQLException e) {
+            logError("existsByName", e);
+            return false;
+        }
+    }
+
+    // ================= ROW MAPPER =================
+
+    private Department mapRow(ResultSet rs) throws SQLException {
+        return new Department(
+                rs.getInt("department_id"),
+                rs.getString("department_name")
+        );
+    }
+
+    // ================= ERROR LOGGING =================
+
+    private void logError(String method, SQLException e) {
+        System.err.println("[DepartmentDaoImpl] Error in " + method);
+        e.printStackTrace();
     }
 }

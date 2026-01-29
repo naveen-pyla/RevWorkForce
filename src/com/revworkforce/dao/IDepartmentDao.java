@@ -14,4 +14,7 @@ public interface IDepartmentDao {
     List<Department> getAllDepartments();
 
     boolean deleteDepartment(int departmentId);
+
+    boolean existsByName(String departmentName);
+
 }

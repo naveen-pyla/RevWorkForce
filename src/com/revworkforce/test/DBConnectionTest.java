@@ -12,7 +12,7 @@ public class DBConnectionTest {
 
         try (Connection con = DBConnection.getConnection();
              Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT 1 FROM dual")) {
+             ResultSet rs = stmt.executeQuery("SELECT 1+2 FROM dual")) {
 
             if (rs.next()) {
                 System.out.println("✅ DB Connection successful. Result = " + rs.getInt(1));

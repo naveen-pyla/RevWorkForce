@@ -1,5 +1,6 @@
 package com.revworkforce.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Employee {
@@ -16,7 +17,7 @@ public class Employee {
     private int departmentId;
     private String designation;
     private Integer managerId;
-    private double salary;
+    private BigDecimal salary;
     private String status;
 
     public Employee() {}
@@ -24,7 +25,7 @@ public class Employee {
     public Employee(int userId, String firstName, String lastName, String phone,
                     String address, String emergencyContact, LocalDate dob,
                     LocalDate joiningDate, int departmentId, String designation,
-                    Integer managerId, double salary, String status) {
+                    Integer managerId, BigDecimal salary, String status) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,7 +44,7 @@ public class Employee {
     public Employee(int empId, int userId, String firstName, String lastName,
                     String phone, String address, String emergencyContact,
                     LocalDate dob, LocalDate joiningDate, int departmentId,
-                    String designation, Integer managerId, double salary,
+                    String designation, Integer managerId, BigDecimal salary,
                     String status) {
         this.empId = empId;
         this.userId = userId;
@@ -97,8 +98,8 @@ public class Employee {
     public Integer getManagerId() { return managerId; }
     public void setManagerId(Integer managerId) { this.managerId = managerId; }
 
-    public double getSalary() { return salary; }
-    public void setSalary(double salary) { this.salary = salary; }
+    public BigDecimal getSalary() { return salary; }
+    public void setSalary(BigDecimal salary) { this.salary = salary; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
