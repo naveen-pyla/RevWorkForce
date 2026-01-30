@@ -1,15 +1,17 @@
 package com.revworkforce.dao.impl;
 
 import com.revworkforce.dao.IDepartmentDao;
+import com.revworkforce.dao.IGoalsDao;
 import com.revworkforce.model.Goals;
 import com.revworkforce.util.DBConnection;
-
+import com.revworkforce.dao.IUserDao;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoalsDaoImpl implements IDepartmentDao.IGoalsDao {
+public class GoalsDaoImpl implements IGoalsDao
+{
 
     // ================= SQL QUERIES =================
 

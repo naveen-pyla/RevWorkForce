@@ -3,12 +3,13 @@ package com.revworkforce.dao.impl;
 import com.revworkforce.dao.IDepartmentDao;
 import com.revworkforce.model.PerformanceReview;
 import com.revworkforce.util.DBConnection;
+import com.revworkforce.dao.IPerformanceReviewDao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PerformanceReviewDaoImpl implements IDepartmentDao.IPerformanceReviewDao {
+public class PerformanceReviewDaoImpl implements IPerformanceReviewDao {
 
     // ================= SQL QUERIES =================
 

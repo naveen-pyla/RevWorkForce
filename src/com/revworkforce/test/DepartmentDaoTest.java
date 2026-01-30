@@ -1,5 +1,7 @@
 package com.revworkforce.test;
 
+import com.revworkforce.dao.IDepartmentDao;
+import com.revworkforce.dao.impl.DepartmentDaoImpl;
 import com.revworkforce.model.Department;
 
 import java.util.List;
