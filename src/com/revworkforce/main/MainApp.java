@@ -1,5 +1,9 @@
 package com.revworkforce.main;
 
-public class MainApp {
-
+public class MainApp
+{
+    public static void main(String[] args)
+    {
+        System.out.println("hi");
+    }
 }

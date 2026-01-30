@@ -11,7 +11,7 @@ import com.revworkforce.util.DBConnection;
 public class NotificationsDaoImpl implements INotificationsDao {
 
     @Override
-    public boolean createNotification(Notifications notification) {
+    public boolean addNotification(Notifications notification) {
         String sql = "INSERT INTO notifications (user_id, message, type, is_read) VALUES (?, ?, ?,? )";
 
         try (Connection con = DBConnection.getConnection();
@@ -31,7 +31,28 @@ public class NotificationsDaoImpl implements INotificationsDao {
     }
 
     @Override
-    public List<Notifications> getNotificationsByUser(int userId) {
+    public int getUnreadCount(int userId) {
+        String sql = "SELECT COUNT(*) FROM notifications WHERE user_id=? AND is_read=0";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
+    @Override
+    public List<Notifications> getNotificationsByUserId(int userId) {
         List<Notifications> list = new ArrayList<>();
         String sql = "SELECT * FROM notifications WHERE user_id=? ORDER BY created_at DESC";
 
@@ -73,26 +94,6 @@ public class NotificationsDaoImpl implements INotificationsDao {
             e.printStackTrace();
         }
         return false;
-    }
-
-    @Override
-    public int getUnreadCount(int userId) {
-        String sql = "SELECT COUNT(*) FROM notifications WHERE user_id=? AND is_read=0";
-
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     @Override

@@ -7,7 +7,7 @@ public interface INotificationsDao {
 
     boolean addNotification(Notifications notification);
 
-    Notifications getNotificationById(int notificationId);
+    int getUnreadCount(int userId);
 
     List<Notifications> getNotificationsByUserId(int userId);
 
