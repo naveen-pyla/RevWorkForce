@@ -1,4 +1,4 @@
-package  com.revworkforce.commonService;
+package com.revworkforce.service;
 
 import java.util.List;
 
